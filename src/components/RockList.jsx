@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 
-export const RockList = ({ rocks, fetchRocks }) => {
+export const RockList = ({ rocks, fetchRocks, showAll }) => {
   useEffect(() => {
-    fetchRocks();
-  }, []);
+    fetchRocks(showAll);
+  }, [showAll]); // When the route changes update fetchRocks
 
 
   const displayRocks = () => {
@@ -19,6 +19,29 @@ export const RockList = ({ rocks, fetchRocks }) => {
           <div>
             Owned By: {rock.user.first_name} {rock.user.last_name}
           </div>
+          {
+            showAll
+              ? "" // | ? = when showAll = true - when its true dont render anything
+                  // When it is false - render this
+              : <div> 
+              <button
+                className="border border-solid bg-red-700 text-white p-1"
+                onClick={async () => {
+                  const response = await fetch(`http://localhost:8000/rocks/${rock.id}`, {
+                    method: "DELETE",
+                    headers: {
+                      Authorization: `Token ${JSON.parse(localStorage.getItem("rock_token")).token}`
+                  }
+                  })
+                  if (response.status == 204){
+                    fetchRocks(showAll)
+                  }
+                }}
+              > 
+                Delete</button>
+            </div>
+          }
+          
         </div>
       ));
     }

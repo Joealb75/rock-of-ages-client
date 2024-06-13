@@ -5,7 +5,7 @@ export const RockForm = ({ fetchRocks }) => {
     const initialRockState = {
         name: "",
         weight: 0,
-        typeId: 0,
+        type_id: 0,
     
     }
 
